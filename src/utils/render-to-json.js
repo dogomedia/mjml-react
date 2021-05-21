@@ -17,7 +17,7 @@ const reconciler = ReactReconciler({
       tagName: type,
       attributes: rest,
     };
-    Object.keys(res.attributes).forEach((key) => {
+    Object.keys(res.attributes).forEach(key => {
       const attrKey = res.attributes[key];
       if (attrKey === undefined) {
         delete res.attributes[key];
@@ -95,7 +95,7 @@ function toReactElement(element) {
   return React.createElement(
     element.type,
     element.props,
-    element.children.map((child) =>
+    element.children.map(child =>
       typeof child === 'string' ? child : toReactElement(child),
     ),
   );
