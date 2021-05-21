@@ -1,6 +1,4 @@
 import ReactDOMServer from 'react-dom/server';
-import mjml2html from 'mjml';
-
 import { renderToJSON } from './utils/render-to-json';
 
 export { render, renderToMjml, renderToJSON };
@@ -39,14 +37,20 @@ export { MjmlText } from './mjml-text';
 export { MjmlTitle } from './mjml-title';
 export { MjmlWrapper } from './mjml-wrapper';
 
-function render(email, options = {}) {
+async function render(email, options = {}) {
   const defaults = {
     keepComments: false,
     beautify: false,
     minify: true,
     validationLevel: 'strict',
   };
-  return mjml2html(renderToMjml(email), { ...defaults, ...options });
+  if (typeof window === 'undefined') {
+    const mjml2html = (await import('mjml')).default;
+    return mjml2html(renderToMjml(email), { ...defaults, ...options });
+  } else {
+    const mjml2html = (await import('mjml-browser')).default;
+    return mjml2html(renderToMjml(email), { ...defaults, ...options });
+  }
 }
 
 function renderToMjml(email) {
